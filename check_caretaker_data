@@ -1,0 +1,12 @@
+<?php
+header("Content-Type: application/json");
+require_once 'config.php';
+
+try {
+    $stmt = $conn->query("SELECT id, username, caretaker_name, caretaker_relationship, caretaker_mobile FROM users WHERE caretaker_name != '' OR caretaker_relationship != '' OR caretaker_mobile != ''");
+    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    echo json_encode(["status" => "success", "users" => $users]);
+} catch (PDOException $e) {
+    echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+}
+?>
