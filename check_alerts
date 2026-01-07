@@ -1,0 +1,22 @@
+<?php
+require_once 'config.php';
+
+echo "<h1>Doctor Alerts Dump</h1>";
+try {
+    $stmt = $conn->query("SELECT * FROM doctor_alerts");
+    $alerts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    if (empty($alerts)) {
+        echo "No alerts found in table.";
+    } else {
+        foreach ($alerts as $row) {
+            echo "ID: " . $row['id'] . 
+                 " | Doc: " . $row['doctor_username'] . 
+                 " | Patient: " . $row['patient_username'] . 
+                 " | Msg: " . $row['alert_message'] . "\n";
+        }
+    }
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
+?>
