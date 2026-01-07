@@ -1,0 +1,22 @@
+<?php
+header('Content-Type: application/json');
+require_once 'config.php';
+
+$username = $_GET['username'] ?? '';
+
+if (empty($username)) {
+    echo json_encode(["status" => "error", "message" => "Missing username"]);
+    exit;
+}
+
+try {
+    $stmt = $conn->prepare("SELECT * FROM fetal_growth_history WHERE username = :username ORDER BY created_at DESC");
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
+    $history = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode(["status" => "success", "history" => $history]);
+} catch (PDOException $e) {
+    echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+}
+?>
